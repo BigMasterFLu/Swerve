@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //convert to meters instead of rotations
 import frc.lib.math.Conversions;
 
-public class SwerveModule extends SubsystemBase {
+public class SwerveModules extends SubsystemBase {
   /** Creates a new Swerve. */
   private TalonFX drivemotor;
   private TalonFX turnmotor;
@@ -37,7 +37,7 @@ public class SwerveModule extends SubsystemBase {
   private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
   private PositionVoltage pv = new PositionVoltage(0);
   
-  public SwerveModule(int drivemotor, int turnmotor, int cancoder, Rotation2d angleOfset) {
+  public SwerveModules(int mod, int drivemotor, int turnmotor, int cancoder, Rotation2d angleOfset) {
     this.drivemotor = new TalonFX(drivemotor);
     this.turnmotor = new TalonFX(turnmotor);
     this.cancoder = new CANcoder(cancoder);
@@ -91,7 +91,21 @@ public class SwerveModule extends SubsystemBase {
     turnmotor.setControl(pv.withPosition(optimize.angle.getRotations()));
     setSpeed(optimize, isOpenLoop);
   }
-  
+  // public SwerveModuleState[] getModuleStates(){
+  //       SwerveModuleState[] states = new SwerveModuleState[4];
+  //       for(SwerveModule mod : mSwerveMods){
+  //           states[mod.moduleNumber] = mod.getState();
+  //       }
+  //       return states;
+  //   }
+
+  //   public SwerveModulePosition[] getModulePositions(){
+  //       SwerveModulePosition[] positions = new SwerveModulePosition[4];
+  //       for(SwerveModule mod : mSwerveMods){
+  //           positions[mod.moduleNumber] = mod.getPosition();
+  //       }
+  //       return positions;
+  //   }
   private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
     if(isOpenLoop){
       dco.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
@@ -102,7 +116,6 @@ public class SwerveModule extends SubsystemBase {
         driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond); //method called .calculate use drivefeedforward class and apply that method desired state but in .speedmeterspersecond      }
       }
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
